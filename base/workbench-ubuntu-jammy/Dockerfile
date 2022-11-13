@@ -60,8 +60,7 @@ RUN \
 
 ENV LANG en_US.UTF-8
 
-
-COPY ./base/ubuntu-jammy/shim /shim
+COPY ./base/workbench-ubuntu-jammy/shim /shim
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
