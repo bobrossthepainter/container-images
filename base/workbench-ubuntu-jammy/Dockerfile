@@ -34,7 +34,6 @@ RUN \
   curl \
   dnsutils \
   jq \
-  yq \
   locales \
   tini \
   git \
