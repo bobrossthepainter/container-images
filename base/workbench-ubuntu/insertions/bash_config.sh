@@ -6,4 +6,4 @@ git_branch(){
 source /etc/profile
 
 PS1='\[\033[01;32m\]\u@docker\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-### END - Ubuntu Jammy insertions #####
+### END - Ubuntu Jammy insertions ######
