@@ -34,9 +34,9 @@ RUN \
   && echo 'APT::Get::Install-Recommends "false";' >>/etc/apt/apt.conf.d/00recommends \
   && echo 'APT::Get::Install-Suggests "false";' >>/etc/apt/apt.conf.d/00recommends \
   && \
-  apt-get -qq update \
+  apt update \
   && \
-  apt-get install -y \
+  apt install -y \
   bash \
   zsh \
   ca-certificates \
@@ -56,9 +56,9 @@ RUN \
   && ln -s /usr/bin/vim.tiny /usr/local/bin/vim \
   && ln -s /usr/bin/vim.tiny /usr/local/bin/nano \
   && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && apt-get autoremove -y \
-  && apt-get clean \
+  && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && apt autoremove -y \
+  && apt clean \
   && \
   rm -rf \
   /tmp/* \
