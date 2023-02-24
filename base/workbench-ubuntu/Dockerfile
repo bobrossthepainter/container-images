@@ -5,6 +5,7 @@ FROM ubuntu:${VERSION}
 ARG VERSION
 ARG TARGETPLATFORM
 ARG TARGETOS
+ARG TARGETARCH
 ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
 # BUILDPLATFORM — matches the current machine. (e.g. linux/amd64)
@@ -76,7 +77,7 @@ ENV COLORTERM=xterm-color
 ENV TERM=xterm-color
 
 # go-task
-ENV GO_TASK_VERSION=3.20.0
+ENV GO_TASK_VERSION=3.21.0
 RUN curl -sSLo - https://github.com/go-task/task/releases/download/v${GO_TASK_VERSION}/task_${TARGETOS}_${TARGETARCH}.tar.gz | tar xzf - -C /usr/local/bin/
 
 COPY ./base/workbench-ubuntu/shim /shim
