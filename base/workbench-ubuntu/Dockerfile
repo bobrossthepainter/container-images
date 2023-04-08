@@ -41,7 +41,9 @@ RUN \
   bash \
   zsh \
   ca-certificates \
+  build-essential \
   curl \
+  unzip \
   dnsutils \
   jq \
   locales \
@@ -50,13 +52,13 @@ RUN \
   openssh-client \
   bash-completion \
   tzdata \
-  vim-tiny \
+  # vim-tiny \
   && \
   localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-  && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \
-  && ln -s /usr/bin/vim.tiny /usr/local/bin/vim \
-  && ln -s /usr/bin/vim.tiny /usr/local/bin/nano \
-  && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
+  # && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \
+  # && ln -s /usr/bin/vim.tiny /usr/local/bin/vim \
+  # && ln -s /usr/bin/vim.tiny /usr/local/bin/nano \
+  # && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
   && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt autoremove -y \
   && apt clean \
@@ -69,15 +71,21 @@ RUN \
 
 ENV LANG en_US.UTF-8
 
+# docker
+ARG DOCKER_VERSION=23.0.3
+RUN mkdir -p /opt && \
+  curl -qL https://download.docker.com/linux/static/stable/$(uname -m)/docker-${DOCKER_VERSION}.tgz | tar xvz -C /opt && \
+  ln -s /opt/docker/docker /usr/local/bin/docker
+
 # install arkade
 RUN curl -sLS https://get.arkade.dev | sh
 
-ENV PATH=$PATH:$HOME/.arkade/bin/
-ENV COLORTERM=xterm-color
-ENV TERM=xterm-color
+ENV PATH=$PATH:/root/.arkade/bin
+
+ENV TERM=xterm-256color
 
 # go-task
-ENV GO_TASK_VERSION=3.21.0
+ENV GO_TASK_VERSION=3.23.0
 RUN curl -sSLo - https://github.com/go-task/task/releases/download/v${GO_TASK_VERSION}/task_${TARGETOS}_${TARGETARCH}.tar.gz | tar xzf - -C /usr/local/bin/
 
 COPY ./base/workbench-ubuntu/shim /shim
