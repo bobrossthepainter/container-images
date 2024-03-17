@@ -205,6 +205,6 @@ jobs:
           tags: |
             ${{ env.CONTAINER_REGISTRY }}/${{ env.REPO }}/${{ matrix.container }}:latest
             ${{ env.CONTAINER_REGISTRY }}/${{ env.REPO }}/${{ matrix.container }}:rolling
-            ${{ env.CONTAINER_REGISTRY }}/${{ env.REPO }}/${{ matrix.container }}:v${{ steps.prep.outputs.version }}
+            ${{ env.CONTAINER_REGISTRY }}/${{ env.REPO }}/${{ matrix.container }}:${{ steps.prep.outputs.image_version }}
           cache-from: ${{ steps.prep.outputs.cache_from }}
           cache-to: ${{ steps.prep.outputs.cache_to }}

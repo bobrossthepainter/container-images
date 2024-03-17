@@ -16,11 +16,20 @@ jobs:
       - name: Fetch new base versions
         run: |
           find ./base -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | while read app; do
-            if test -f "./base/${app}/latest-version.sh"; then
-              version=$(bash "./base/${app}/latest-version.sh")
-              if [[ ! -z "${version}" || "${version}" != "null" ]]; then
-                echo "${version}" | tee "./base/${app}/VERSION" > /dev/null
-                echo "${app} ${version}"
+            if test -f "./base/${app}/latest-base-version.sh"; then
+              base_version=$(bash "./base/${app}/latest-base-version.sh")
+              current_base_version="$(cat ./base/${app}/BASE_VERSION)"
+              echo "DEBUG: base:$base_version current:$current_base_version"
+              if [[ ! -z "${base_version}" || "${base_version}" != "null" ]]; then
+                echo "${base_version}" | tee "./base/${app}/BASE_VERSION" > /dev/null
+                echo "${app} ${base_version}"
+              fi
+            fi
+            if [[ "${base_version}" != "${current_base_version}" && -f "./base/${app}/new-image-version.sh" ]]; then
+              image_version=$(bash "./base/${app}/new-image-version.sh")
+              if [[ ! -z "${image_version}" || "${image_version}" != "null" ]]; then
+                echo "${image_version}" | tee "./base/${app}/IMAGE_VERSION" > /dev/null
+                echo "${app} ${image_version}"
               fi
             fi
           done
