@@ -1,8 +1,7 @@
-ARG VERSION
+ARG BASE_VERSION
 
-FROM ubuntu:${VERSION}
+FROM ubuntu:${BASE_VERSION}
 
-ARG VERSION
 ARG TARGETPLATFORM
 ARG TARGETOS
 ARG TARGETARCH
@@ -20,7 +19,7 @@ ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 # DEBIAN_FRONTEND: https://askubuntu.com/questions/972516/debian-frontend-environment-variable
 # APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: http://stackoverflow.com/questions/48162574/ddg#49462622
 ENV \
-  VERSION="${VERSION}" \
+  BASE_VERSION="${BASE_VERSION}" \
   DEBCONF_NONINTERACTIVE_SEEN=true \
   DEBIAN_FRONTEND="noninteractive" \
   APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
@@ -64,5 +63,5 @@ ENTRYPOINT [ "/shim/shell.sh" ]
 
 LABEL \
   org.opencontainers.image.base.name="ghcr.io/bobrossthepainter/container-images/workbench-ubuntu" \
-  org.opencontainers.image.base.version="${VERSION}" \
+  org.opencontainers.image.base.version="${BASE_VERSION}" \
   org.opencontainers.image.authors="Robert Lang <mail@roblang.de>"

@@ -171,7 +171,7 @@ jobs:
         if: ${{ steps.prep.outputs.goss == 'true' }}
         uses: docker/build-push-action@v3
         with:
-          build-args: VERSION=${{ steps.prep.outputs.version }}
+          build-args: BASE_VERSION=${{ steps.prep.outputs.base_version }}
           labels: |
             org.opencontainers.image.created=${{ steps.prep.outputs.build_date }}
           context: .
@@ -194,7 +194,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
-          build-args: VERSION=${{ steps.prep.outputs.version }}
+          build-args: BASE_VERSION=${{ steps.prep.outputs.base_version }}
           labels: |
             org.opencontainers.image.created=${{ steps.prep.outputs.build_date }}
           context: .
