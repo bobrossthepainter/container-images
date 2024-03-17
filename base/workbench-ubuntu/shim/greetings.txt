@@ -1,0 +1,5 @@
+Ubuntu workbench container.
+
+* Repository & Docs: https://github.com/bobrossthepainter/container-images
+* Bugs or feature requests should be opened in an GH issue
+* Questions should be discussed in Discord or GH discussions

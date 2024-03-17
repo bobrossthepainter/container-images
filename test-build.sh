@@ -12,14 +12,14 @@ BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 mkdir -p $DIR/tmp
 
 # check if file exists
-if [ ! -f $DIR/$1/VERSION ]; then
-    echo "No VERSION file found in $DIR/$1"
+if [ ! -f $DIR/$1/BASE_VERSION ]; then
+    echo "No BASE_VERSION file found in $DIR/$1"
     exit 1
 fi
 
-VERSION=$(awk '{ printf "%s", $0 }' $DIR/$1/VERSION)
+VERSION=$(awk '{ printf "%s", $0 }' $DIR/$1/BASE_VERSION)
 echo $VERSION
-docker buildx build --build-arg VERSION="jammy-20221101" --file $DIR/$1/Dockerfile .
+docker buildx build --build-arg VERSION="jammy-20221101" --file $DIR/$1/Dockerfile -t $1 .
     # --iidfile /tmp/$1/iidfile  \ 
     # --label org.opencontainers.image.created=$BUILD_DATE  \ 
     # --platform linux/amd64,linux/arm64  \ 

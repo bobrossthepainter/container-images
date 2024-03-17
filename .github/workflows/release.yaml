@@ -29,6 +29,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          token: ${{ secrets.PAT_TOKEN }}
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -92,12 +95,19 @@ jobs:
             CATEGORY="base"
           fi
           echo "::set-output name=category::${CATEGORY}"
-          VERSION=$(cat ./${CATEGORY}/${{ matrix.container }}/VERSION)
+          BASE_VERSION=$(cat ./${CATEGORY}/${{ matrix.container }}/BASE_VERSION)
+          if test -f "./${CATEGORY}/${{ matrix.container }}/IMAGE_VERSION"; then
+            IMAGE_VERSION=$(cat ./${CATEGORY}/${{ matrix.container }}/IMAGE_VERSION)
+          else
+            IMAGE_VERSION=$(cat ./${CATEGORY}/${{ matrix.container }}/BASE_VERSION)
+          fi
 
-          echo "the version is $VERSION"
+          echo "the base_version is $BASE_VERSION"
+          echo "the image_version is $IMAGE_VERSION"
 
           echo "::set-output name=build_date::${BUILD_DATE}"
-          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=base_version::${BASE_VERSION}
+          echo ::set-output name=image_version::${IMAGE_VERSION}
           PLATFORM=$(cat ./${CATEGORY}/${{ matrix.container }}/PLATFORM)
 
           echo "::set-output name=platform::${PLATFORM}"

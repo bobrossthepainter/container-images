@@ -33,68 +33,34 @@ RUN \
   && echo 'APT::Install-Recommends "false";' >/etc/apt/apt.conf.d/00recommends \
   && echo 'APT::Install-Suggests "false";' >>/etc/apt/apt.conf.d/00recommends \
   && echo 'APT::Get::Install-Recommends "false";' >>/etc/apt/apt.conf.d/00recommends \
-  && echo 'APT::Get::Install-Suggests "false";' >>/etc/apt/apt.conf.d/00recommends \
-  && \
-  apt update \
-  && \
-  apt install -y \
-  bash \
-  zsh \
-  ca-certificates \
-  build-essential \
-  curl \
-  unzip \
-  dnsutils \
-  jq \
-  locales \
-  tini \
-  git \
-  openssh-client \
-  bash-completion \
-  tzdata \
-  # vim-tiny \
-  && \
-  localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-  # && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \
-  # && ln -s /usr/bin/vim.tiny /usr/local/bin/vim \
-  # && ln -s /usr/bin/vim.tiny /usr/local/bin/nano \
-  # && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
-  && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && apt autoremove -y \
-  && apt clean \
-  && \
-  rm -rf \
-  /tmp/* \
-  /var/lib/apt/lists/* \
-  /var/cache/apt/* \
-  /var/tmp/*
+  && echo 'APT::Get::Install-Suggests "false";' >>/etc/apt/apt.conf.d/00recommends
 
-ENV LANG en_US.UTF-8
+COPY ./devcontainer-features/src/common-utils /usr/local/etc/vscode-dev-containers/common-utils
+
+ENV USERNAME=root \
+    ADD_NON_FREE_PACKAGES=true \
+    CONFIGUREZSHASDEFAULTSHELL=true
+RUN /usr/local/etc/vscode-dev-containers/common-utils/install.sh
 
 # docker
-ARG DOCKER_VERSION=23.0.3
+ARG DOCKER_VERSION=25.0.4
 RUN mkdir -p /opt && \
   curl -qL https://download.docker.com/linux/static/stable/$(uname -m)/docker-${DOCKER_VERSION}.tgz | tar xvz -C /opt && \
   ln -s /opt/docker/docker /usr/local/bin/docker
 
-# install arkade
-RUN curl -sLS https://get.arkade.dev | sh
-
-ENV PATH=$PATH:/root/.arkade/bin
-
-ENV TERM=xterm-256color
-
 # go-task
-ENV GO_TASK_VERSION=3.23.0
+ENV GO_TASK_VERSION=3.35.1
 RUN curl -sSLo - https://github.com/go-task/task/releases/download/v${GO_TASK_VERSION}/task_${TARGETOS}_${TARGETARCH}.tar.gz | tar xzf - -C /usr/local/bin/
 
 COPY ./base/workbench-ubuntu/shim /shim
-COPY ./base/workbench-ubuntu/insertions /insertions
 
-RUN printf "$(cat /insertions/bash_config.sh)\n" >> /etc/bash.bashrc \
-  && printf "/bin/bash /shim/greeting.sh\n" >> /etc/bash.bashrc 
+COPY ./base/workbench-ubuntu/shim/greetings.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt
 
-ENTRYPOINT [ "/usr/bin/tini", "--" ]
+# RUN printf "$(cat /insertions/bash_config.sh)\n" >> /etc/bash.bashrc \
+#   && printf "/bin/bash /shim/greeting.sh\n" >> /etc/bash.bashrc 
+
+# ENTRYPOINT [ "/usr/bin/tini", "--" ]
+ENTRYPOINT [ "/shim/shell.sh" ]
 
 LABEL \
   org.opencontainers.image.base.name="ghcr.io/bobrossthepainter/container-images/workbench-ubuntu" \

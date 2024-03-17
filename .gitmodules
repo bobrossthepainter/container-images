@@ -1,0 +1,3 @@
+[submodule "devcontainer-features"]
+	path = devcontainer-features
+	url = git@github.com:bobrossthepainter/devcontainer-features.git
